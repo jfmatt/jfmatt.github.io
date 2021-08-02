@@ -1,0 +1,34 @@
+name: Build and deploy Jekyll site to GH Pages
+
+# Trigger from main pushes/PRs only
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  github-pages:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: ruby-setup
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.5
+
+      - name: build
+        uses: limjh16/jekyll-action-ts@v2
+        with:
+          jekyll_src: ./jekyll
+          enable_cache: true
+
+      - name: deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./jekyll/_site
+
+
+
